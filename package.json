@@ -1,0 +1,12 @@
+{
+  "name": "blursed-image-zooming",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/niruhsa/blursed-image-zooming.git",
+  "author": "niruhsa <niruhsa>",
+  "license": "MIT",
+  "scripts": {
+    "cleanup-wasm": "rm -rf deps js/dist",
+    "compile-wasm": "yarn run cleanup-wasm && mkdir deps js/dist && git clone https://github.com/silvia-odwyer/photon deps/photon && rm deps/photon/crate/Cargo.toml && cp cargo.default deps/photon/crate/Cargo.toml && wasm-pack build --target web deps/photon/crate && cp -r deps/photon/crate/pkg/* js/dist/"
+  }
+}

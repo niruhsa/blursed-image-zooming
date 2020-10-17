@@ -1,2 +1,4 @@
-pkg
-target
+deps
+js/dist
+yarn.lock
+node_modules

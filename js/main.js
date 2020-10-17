@@ -7,13 +7,14 @@ $(document).ready(async () => {
     var zoomFactor = 1;
     var lastZoomEvent = new Date();
 
-
     container.css('height', img.height());
     container.css('width', img.width());
     container.css('overflow', 'scroll');
 
+    await window.loadPhoton();
     const imageBase64 = await encodeImageFileAsURL();
-
+    const image = window.photon.base64_to_image(imageBase64.split("data:image/png;base64,")[1]);
+    
     img.on('touchstart', (e) => {
         if (event.touches.length === 2) {
             e.preventDefault();
@@ -81,9 +82,12 @@ $(document).ready(async () => {
             };
 
             const coords = window.TouchCoordinates = { x: zoomCoords.x, y: zoomCoords.y, w: zoomCoords.w, h:zoomCoords.h, originalWidth: zoomCoords.originalWidth, originalHeight: zoomCoords.originalHeight };
-            const image = window.zoom_image(imageBase64.split("data:image/png;base64,")[1], coords.x, coords.y, coords.w, coords.h, coords.originalWidth, coords.originalHeight);
-            img.attr('src', image);
-            console.log(zoomCoords);
+            const wasmStart = new Date().getTime();
+            const newImage = window.photon.crop(image, coords.x, coords.y, coords.w, coords.h);
+            const wasmEnd = new Date().getTime();
+
+            console.log('[WASM RUNTIME] ' + (wasmEnd - wasmStart));
+
             lastZoomEvent = new Date().getTime();
         }
 

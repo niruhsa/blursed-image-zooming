@@ -1,5 +1,8 @@
-import wasm, { greet, zoom_image } from "../src/wasm/pkg/wasm.js";
+import photon from './dist/photon_rs.js';
 
-wasm();
-window.greet = greet;
-window.zoom_image = zoom_image;
+window.loadPhoton = (() => {
+    return new Promise(async (resolve) => {
+        window.photon = await photon();
+        return resolve(true);
+    });
+});
